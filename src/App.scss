@@ -1,0 +1,223 @@
+$color-bg: #0f1115;
+$color-surface: #1a1d24;
+$color-border: #2a2e38;
+$color-text: #f4f5f7;
+$color-muted: #9aa0ac;
+$color-accent: #fb923c;
+$color-negative: #f87171;
+$color-water: #38bdf8;
+
+.app {
+  color: $color-text;
+}
+
+.app__content {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 3rem 2.5rem;
+}
+
+.tabs {
+  display: flex;
+  width: 100%;
+  background: $color-surface;
+  border-bottom: 1px solid $color-border;
+}
+
+.tabs__tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 1rem 0.75rem;
+  color: $color-muted;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  &:hover {
+    color: $color-text;
+  }
+
+  &--active {
+    background: $color-water;
+    color: $color-text;
+  }
+}
+
+.calorie-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.calorie-form__field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+
+  &--exercise {
+    margin-top: 1rem;
+  }
+}
+
+.calorie-form__label {
+  font-size: 0.95rem;
+  color: $color-muted;
+}
+
+.calorie-form__input {
+  width: 6rem;
+  text-align: right;
+  background: transparent;
+  border: none;
+  color: $color-text;
+  font-size: 1.1rem;
+  font-variant-numeric: tabular-nums;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    appearance: none;
+    margin: 0;
+  }
+
+  &[type="number"] {
+    appearance: textfield;
+  }
+
+  &:disabled {
+    color: $color-muted;
+    opacity: 0.7;
+  }
+}
+
+.totals {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.totals__total {
+  font-size: 3rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.totals__allowed {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: $color-muted;
+
+  &--negative {
+    color: $color-negative;
+  }
+}
+
+.end-day {
+  width: 100%;
+  margin-top: 2rem;
+  background: $color-accent;
+  border: none;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  color: $color-bg;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    opacity 0.15s ease;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &--active {
+    background: $color-surface;
+    color: $color-muted;
+    border: 1px solid $color-border;
+  }
+}
+
+.weight-tracker__placeholder {
+  text-align: center;
+  color: $color-muted;
+  font-size: 0.95rem;
+  margin-top: 3rem;
+}
+
+.water-tracker__grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.5rem;
+}
+
+.water-tracker__glass {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 0.75rem;
+  color: $color-water;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  &:hover {
+    border-color: rgba($color-water, 0.5);
+  }
+
+  &--filled {
+    background: rgba($color-water, 0.15);
+    border-color: $color-water;
+    color: $color-water;
+  }
+}
+
+.water-tracker__totals {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.water-tracker__stat {
+  background: $color-surface;
+  border: 1px solid $color-border;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+
+.water-tracker__stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.water-tracker__stat-label {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: $color-muted;
+}
