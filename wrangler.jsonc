@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "get-fit",
+  "compatibility_date": "2026-08-27",
+  "main": "worker/index.ts",
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "get-fit-db",
+      "database_id": "885ccea7-d754-4302-a768-8e05988f8a16"
+    }
+  ]
+}
