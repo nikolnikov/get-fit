@@ -2,6 +2,7 @@ import type { ChangeEvent } from 'react'
 import { INTAKE_FIELDS } from '../constants'
 import { ChevronLeftIcon, ChevronRightIcon } from '../icons'
 import type { DayLog, FormField } from '../types'
+import { Spinner } from './Spinner'
 
 type LogTabProps = {
   currentDay: DayLog
@@ -13,6 +14,7 @@ type LogTabProps = {
   onChange: (field: FormField) => (event: ChangeEvent<HTMLInputElement>) => void
   total: number
   remaining: number
+  totalsLoaded: boolean
   onToggleDayEnded: () => void
 }
 
@@ -26,6 +28,7 @@ export function LogTab({
   onChange,
   total,
   remaining,
+  totalsLoaded,
   onToggleDayEnded,
 }: LogTabProps) {
   return (
@@ -85,11 +88,17 @@ export function LogTab({
       </form>
 
       <div className="totals">
-        <div className="totals__total">{total}</div>
-        <div className={`totals__allowed${remaining <= 0 ? ' totals__allowed--negative' : ''}`}>
-          {remaining.toLocaleString()}
-          {remaining > 0 ? ' cal remaining' : ''}
-        </div>
+        {totalsLoaded ? (
+          <>
+            <div className="totals__total">{total}</div>
+            <div className={`totals__allowed${remaining <= 0 ? ' totals__allowed--negative' : ''}`}>
+              {remaining.toLocaleString()}
+              {remaining > 0 ? ' cal remaining' : ''}
+            </div>
+          </>
+        ) : (
+          <Spinner label="Loading totals" />
+        )}
       </div>
 
       <button

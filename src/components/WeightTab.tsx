@@ -18,8 +18,9 @@ export function WeightTab({ todayWeight, onTodayWeightChange, entries, startWeig
         <input
           className="profile-form__input"
           type="number"
-          inputMode="numeric"
+          inputMode="decimal"
           min={0}
+          step="0.1"
           placeholder="0"
           value={todayWeight}
           onChange={onTodayWeightChange}

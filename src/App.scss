@@ -156,6 +156,26 @@ $color-goal: #34d399;
   line-height: 1;
 }
 
+.spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4.5rem;
+}
+
+.spinner__icon {
+  width: 2rem;
+  height: 2rem;
+  color: $color-accent;
+  animation: spinner-rotate 0.8s linear infinite;
+}
+
+@keyframes spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .totals__allowed {
   margin-top: 0.5rem;
   font-size: 0.9rem;

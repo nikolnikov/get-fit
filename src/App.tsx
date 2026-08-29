@@ -21,9 +21,11 @@ function App() {
 
   const [activeTab, setActiveTab] = useState<Tab>('log')
   const [days, setDays] = useState<Record<string, DayLog>>({})
+  const [daysLoaded, setDaysLoaded] = useState(false)
   const [todayKey, setTodayKey] = useState(() => getDateKey())
   const [viewedDate, setViewedDate] = useState(todayKey)
   const saveTimersRef = useRef<Record<string, number>>({})
+  const pendingSavesRef = useRef<Record<string, DayLog>>({})
 
   useEffect(() => {
     fetch('/api/me', { credentials: 'include' })
@@ -47,6 +49,7 @@ function App() {
       .then((res) => (res.ok ? res.json() : {}))
       .then((data: Record<string, DayLog>) => setDays(data))
       .catch(() => {})
+      .finally(() => setDaysLoaded(true))
   }, [authStatus])
 
   useEffect(() => {
@@ -61,17 +64,40 @@ function App() {
     return () => window.clearInterval(id)
   }, [])
 
-  const persistDay = (dateKey: string, day: DayLog) => {
+  const sendDaySave = (dateKey: string) => {
+    const day = pendingSavesRef.current[dateKey]
+    if (!day) return
+    delete pendingSavesRef.current[dateKey]
     window.clearTimeout(saveTimersRef.current[dateKey])
-    saveTimersRef.current[dateKey] = window.setTimeout(() => {
-      fetch(`/api/days/${dateKey}`, {
-        method: 'PUT',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(day),
-      }).catch(() => {})
-    }, SAVE_DEBOUNCE_MS)
+    fetch(`/api/days/${dateKey}`, {
+      method: 'PUT',
+      credentials: 'include',
+      keepalive: true,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(day),
+    }).catch(() => {})
   }
+
+  const persistDay = (dateKey: string, day: DayLog) => {
+    pendingSavesRef.current[dateKey] = day
+    window.clearTimeout(saveTimersRef.current[dateKey])
+    saveTimersRef.current[dateKey] = window.setTimeout(() => sendDaySave(dateKey), SAVE_DEBOUNCE_MS)
+  }
+
+  useEffect(() => {
+    const flushPendingSaves = () => {
+      Object.keys(pendingSavesRef.current).forEach(sendDaySave)
+    }
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'hidden') flushPendingSaves()
+    }
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('pagehide', flushPendingSaves)
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      window.removeEventListener('pagehide', flushPendingSaves)
+    }
+  }, [])
 
   const currentDay = days[viewedDate] ?? createEmptyDay()
   const todayDay = days[todayKey] ?? createEmptyDay()
@@ -254,6 +280,7 @@ function App() {
             onChange={handleChange}
             total={total}
             remaining={remaining}
+            totalsLoaded={daysLoaded}
             onToggleDayEnded={toggleDayEnded}
           />
         )}
