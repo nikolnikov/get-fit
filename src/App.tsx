@@ -116,10 +116,14 @@ function App() {
   }
 
   const toggleWaterGlass = (index: number) => {
-    updateCurrentDay((day) => ({
-      ...day,
-      waterGlasses: day.waterGlasses.map((filled, i) => (i === index ? !filled : filled)),
-    }))
+    updateCurrentDay((day) => {
+      const waterGlasses = [...day.waterGlasses]
+      while (waterGlasses.length <= index) {
+        waterGlasses.push(false)
+      }
+      waterGlasses[index] = !waterGlasses[index]
+      return { ...day, waterGlasses }
+    })
   }
 
   const toggleDayEnded = () => {

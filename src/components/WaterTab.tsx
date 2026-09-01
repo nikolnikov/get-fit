@@ -1,4 +1,4 @@
-import { OZ_PER_GLASS, WATER_GLASS_COUNT } from '../constants'
+import { OZ_PER_GLASS } from '../constants'
 
 type WaterTabProps = {
   waterGlasses: boolean[]
@@ -8,12 +8,12 @@ type WaterTabProps = {
 export function WaterTab({ waterGlasses, onToggleGlass }: WaterTabProps) {
   const totalGlasses = waterGlasses.filter(Boolean).length
   const totalOz = totalGlasses * OZ_PER_GLASS
-  const visibleGlassCount = Math.min(totalGlasses + 1, WATER_GLASS_COUNT)
+  const visibleGlassCount = totalGlasses + 1
 
   return (
     <div className="water-tracker">
       <div className="water-tracker__grid">
-        {waterGlasses.slice(0, visibleGlassCount).map((filled, index) => (
+        {Array.from({ length: visibleGlassCount }, (_, index) => waterGlasses[index] ?? false).map((filled, index) => (
           <button
             key={index}
             type="button"
@@ -30,6 +30,12 @@ export function WaterTab({ waterGlasses, onToggleGlass }: WaterTabProps) {
               </defs>
               {filled && (
                 <rect x="4" y="9" width="16" height="12" fill="currentColor" clipPath={`url(#glass-clip-${index})`} />
+              )}
+              {!filled && (
+                <g stroke="currentColor" strokeWidth="1.6" strokeLinecap="round">
+                  <line x1="12" y1="10" x2="12" y2="14" />
+                  <line x1="10" y1="12" x2="14" y2="12" />
+                </g>
               )}
               <path
                 d="M6 3h12l-1.5 16.5a2 2 0 0 1-2 1.5H9.5a2 2 0 0 1-2-1.5L6 3Z"
